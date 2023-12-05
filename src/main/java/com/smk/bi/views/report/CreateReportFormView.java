@@ -1,5 +1,7 @@
 package com.smk.bi.views.report;
 
+import com.smk.bi.model.Category;
+import com.smk.bi.repository.CategoryRepository;
 import com.smk.bi.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -14,7 +16,10 @@ import com.vaadin.flow.router.Route;
 @Route(value = "create-report", layout = MainLayout.class)
 public class CreateReportFormView extends VerticalLayout{
     
-    public CreateReportFormView() {
+    private CategoryRepository categoryRepository;
+
+    public CreateReportFormView(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
         createForm();
     }
 
@@ -25,7 +30,9 @@ public class CreateReportFormView extends VerticalLayout{
         emailField.setErrorMessage("Enter a valid email address");
         emailField.setPrefixComponent(VaadinIcon.ENVELOPE.create());
 
-        ComboBox category = new ComboBox<>("Category");
+        ComboBox<Category> category = new ComboBox<>("Category");
+        category.setItems(categoryRepository.findAll());
+        category.setItemLabelGenerator(Category::getCategoryName);
 
         TextArea textArea = new TextArea("Laporan");
 
